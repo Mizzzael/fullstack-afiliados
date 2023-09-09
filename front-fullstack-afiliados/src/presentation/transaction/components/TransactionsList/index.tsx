@@ -7,7 +7,7 @@ import {
     Skeleton,
     Table,
     TableBody,
-    TableCell,
+    TableCell, TableFooter,
     TableHead,
     TableRow,
     Typography
@@ -17,6 +17,7 @@ import {useGetTransactions} from "@root/services/Transaction.service";
 import formatCurrency from "@root/presentation/common/utils/formatCurrency";
 import Empty from "@root/assets/animation/animation_lmbbtwyv.json"
 import Lottie from "react-lottie";
+import formatDate from "@root/presentation/common/utils/formatDate";
 
 const TransactionsList = () => {
     const [ page, setPage ] = useState(1)
@@ -84,10 +85,10 @@ const TransactionsList = () => {
                            </>
                         )
 
-                       return response.result.map(({ id, type, product, seller, value }) => (
+                       return response.result.map(({ id, type, product, seller, value, date }) => (
                            <TableRow key={id}>
                                <TableCell>{id}</TableCell>
-                               <TableCell>24/05/1972</TableCell>
+                               <TableCell>{ formatDate(date) }</TableCell>
                                <TableCell>{ type }</TableCell>
                                <TableCell>{ product }</TableCell>
                                <TableCell>{(() => {
@@ -119,6 +120,50 @@ const TransactionsList = () => {
                        ))
                    })()}
                 </TableBody>
+                {(() => {
+                    if (!response) return;
+                    return (
+                        <TableFooter>
+                            <TableCell>
+                                <Typography
+                                    style={{
+                                        fontWeight: 'bold'
+                                    }}
+                                >
+                                    TOTAL:
+                                </Typography>
+                            </TableCell>
+                            <TableCell></TableCell>
+                            <TableCell></TableCell>
+                            <TableCell></TableCell>
+                            <TableCell></TableCell>
+                            <TableCell>{(() => {
+                                if (response.valueTotal < 0) {
+                                    return (
+                                        <Typography
+                                            style={{
+                                                color: 'red',
+                                                fontWeight: 'bold'
+                                            }}
+                                        >
+                                            {formatCurrency(response.valueTotal)}
+                                        </Typography>
+                                    )
+                                }
+                                return (
+                                    <Typography
+                                        style={{
+                                            color: 'green',
+                                            fontWeight: 'bold'
+                                        }}
+                                    >
+                                        {formatCurrency(response.valueTotal)}
+                                    </Typography>
+                                )
+                            })()}</TableCell>
+                        </TableFooter>
+                    );
+                })()}
             </Table>
             {(() => {
                 if (!response || !response.result.length) return (

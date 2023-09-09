@@ -105,17 +105,17 @@ export interface result {
 export interface useGetTransactionsProps {
     isLoading: boolean;
     error: any;
-    response: { result: result[], total: number  } | null;
+    response: { result: result[], total: number, valueTotal: number  } | null;
     getTransactionsPaginated: (page: number) => void;
 }
 export const useGetTransactions = (): useGetTransactionsProps => {
     const [isLoading, setIsLoading] = useState<boolean>(false)
-    const [response, setResponse] = useState<{ result: result[], total: number  }|null>(null)
+    const [response, setResponse] = useState<{ result: result[], total: number, valueTotal: number  }|null>(null)
     const [error, setError] = useState<any>(null)
     const { token } = useAuth()
     const getTransactionsPaginated = useCallback((page: number) => {
         setIsLoading(true);
-        axios.get<{ result: result[], total: number  }>(`${ process.env.NEXT_PUBLIC_API }/transaction/${ page }/10`, {
+        axios.get<{ result: result[], total: number, valueTotal: number  }>(`${ process.env.NEXT_PUBLIC_API }/transaction/${ page }/10`, {
             headers: {
                 'Authorization': `Bearer ${ token }`
             }

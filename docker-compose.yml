@@ -1,0 +1,39 @@
+version: '3.6'
+services:
+  fullstack_db_prod:
+    image: mariadb
+    restart: always
+    environment:
+      - MARIADB_ROOT_PASSWORD=aW!ZW2MMIjw2mLXr0Zj6If5ycC%4v
+      - MARIADB_DATABASE=fullstack-afiliados-prod
+    ports:
+      - "3306:3306"
+  api-fullstack-afiliados-prod:
+    container_name: api-fullstack-afiliados-prod
+    build:
+      context: .
+      dockerfile: api-fullstack-afiliados/docker/prod.dockerfile
+    volumes:
+      - /app/node_modules
+      - ./api-fullstack-afiliados:/app
+    env_file:
+      - ./api-fullstack-afiliados/.env.prod
+    ports:
+      - 3333:3333
+    links:
+      - fullstack_db_prod:db
+
+  front-fullstack-afiliados-prod:
+    container_name: front-fullstack-afiliados-prod
+    build:
+      context: .
+      dockerfile: front-fullstack-afiliados/docker/prod.dockerfile
+    volumes:
+      - /app/node_modules
+      - ./front-fullstack-afiliados:/app
+    env_file:
+      - front-fullstack-afiliados/.env.production
+    ports:
+      - 3000:3000
+    links:
+      - api-fullstack-afiliados-prod:api-fullstack-afiliados-prod

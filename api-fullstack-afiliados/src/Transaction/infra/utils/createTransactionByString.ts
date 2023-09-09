@@ -1,4 +1,3 @@
-import TransactionEntity from '../../domain/entities/transaction.entity';
 import UserEntity from '../../../User/domain/entities/user.entity';
 import TransactionTypeByNumber from './transactionTypeByNumber';
 import TransactionDto from '../dto/transaction.dto';

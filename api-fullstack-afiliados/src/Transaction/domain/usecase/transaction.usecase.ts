@@ -31,6 +31,10 @@ class TransactionUseCase {
   }
 
   async getTransactions(userId: number, page: number, pageSize: number) {
+    const valueTotal = await this.transactionRepository.sum('value', {
+      userId: userId,
+      active: true,
+    });
     const [result, total] = await this.transactionRepository.findAndCount({
       where: {
         userId: userId,
@@ -49,6 +53,7 @@ class TransactionUseCase {
     return {
       result,
       total,
+      valueTotal,
     };
   }
 }

@@ -10,5 +10,4 @@ COPY ./api-fullstack-afiliados /app
 
 EXPOSE 3333
 
-CMD [ "yarn","build" ]
-CMD [ "yarn","start:prod" ]
+CMD [ "yarn","start:dev" ]

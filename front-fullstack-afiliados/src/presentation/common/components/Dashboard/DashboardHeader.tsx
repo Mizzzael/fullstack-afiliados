@@ -17,6 +17,8 @@ import {LoadingButton} from "@mui/lab";
 import {useCheckEmail, useMe, usePut} from "@root/services/User.service";
 import {useAuth} from "@root/provider/AuthProvider";
 import {Controller, useForm} from "react-hook-form";
+import Header from "@root/presentation/common/components/Dashboard/Header";
+import Form from "@root/presentation/common/components/Dashboard/Form";
 
 const DashboardHeader = () => {
     const [ showModal, setShowModal ] = useState<boolean>(false)
@@ -35,6 +37,12 @@ const DashboardHeader = () => {
         setShowModal(!showModal);
     }, [ showModal ])
 
+    const updateUserHandle = useCallback(({ email, name }: { email: string; name: string; }) => {
+        if (responseCheckEmail && !responseCheckEmail.exist) {
+            updateMe({ email, name });
+        }
+    }, [ responseCheckEmail ])
+
     useEffect(() => {
         if (!isLoading && !response) {
             getMe()
@@ -42,25 +50,11 @@ const DashboardHeader = () => {
     }, [ isLoading, getMe, response ])
 
     useEffect(() => {
-        if (response) {
-            setValue('name', response.name);
-            setValue('email', response.email);
-        }
-    }, [ response ])
-
-    useEffect(() => {
         if ((response && responsePut) && (response.name !== responsePut.name || response.email !== responsePut.email)) {
             getMe();
         }
     }, [ response, responsePut ])
 
-    useEffect(() => {
-        if (responseCheckEmail && !responseCheckEmail.exist) {
-            const email = getValues('email');
-            const name = getValues('name');
-            updateMe({ email, name });
-        }
-    }, [ responseCheckEmail ])
 
     return (
         <Box sx={{
@@ -78,160 +72,33 @@ const DashboardHeader = () => {
                 </DialogTitle>
                 <DialogContent>
                     <S.DashboardProfileContainer>
-                        <form
-                            onSubmit={handleSubmit((data) => {
+                        <Form
+                            onSubmit={(data) => {
                                 if (data.name !== response?.name || data.email !== response?.email) {
                                     if (data.email === response?.email) {
-                                      updateMe(data);
+                                        updateMe(data);
                                     } else {
                                         checkEmail({
                                             email: data.email
                                         })
                                     }
                                 }
-                            })}
-                        >
-                            <Stack spacing={2}>
-                                {(() => {
-                                    if (responseCheckEmail && responseCheckEmail.exist) return (
-                                        <Box
-                                            sx={{
-                                                padding: '10px 0'
-                                            }}
-                                        >
-                                            <Alert
-                                                severity="error" variant={"outlined"} color={'error'}
-                                            >
-                                                Este e-mail já está sendo usado por outro usuário!
-                                            </Alert>
-                                        </Box>
-                                    )
-
-                                    return null
-                                })()}
-                                <Box
-                                    sx={{
-                                        padding: '10px 0'
-                                    }}
-                                >
-                                    <Controller
-                                        render={({ field }) => (
-                                            <TextField
-                                                label="Nome"
-                                                fullWidth
-                                                {...field}
-                                            />
-                                        )}
-                                        control={control}
-                                        name="name"
-                                        rules={{
-                                            required: true
-                                        }}
-                                    />
-                                </Box>
-                                <Box>
-                                    <Controller
-                                        render={({ field }) => (
-                                            <TextField
-                                                label="E-mail"
-                                                fullWidth
-                                                { ...field }
-                                            />
-                                        )}
-                                        control={control}
-                                        rules={{
-                                            required: true,
-                                            pattern: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
-                                        }}
-                                        name="email"
-                                    />
-                                </Box>
-                            </Stack>
-                            <Box
-                                sx={{
-                                    padding: '16px 0',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'end',
-                                    gap: '16px'
-                                }}
-                            >
-                                <LoadingButton
-                                    disabled={!isValid}
-                                    type={'submit'}
-                                    loading={loadingPut}
-                                >
-                                    Salvar
-                                </LoadingButton>
-                                <Button
-                                    variant={"contained"}
-                                    color={"error"}
-                                    onClick={toggleModal}
-                                >
-                                    Cancelar
-                                </Button>
-                            </Box>
-                        </form>
+                            }}
+                            responseCheckEmail={responseCheckEmail}
+                            loadingPut={loadingPut}
+                            toggleModal={toggleModal}
+                            updateUserHandle={updateUserHandle}
+                            response={response}
+                        />
                     </S.DashboardProfileContainer>
                 </DialogContent>
             </Dialog>
-            <Container>
-                <Box
-                    sx={{
-                        padding: '16px 0',
-                        width: '100%',
-                        display: 'grid',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        gridTemplateColumns: '1fr auto'
-                    }}
-                >
-                    <Box>
-
-                            {(() => {
-                                if (isLoading || !response) return (
-                                    <Skeleton height='30px' width='200px' />
-                                )
-                                return (
-                                    <Typography
-                                        variant="h5"
-                                    >
-                                        { response.name }
-                                    </Typography>
-                                )
-                            })()}
-
-                    </Box>
-                    <Box>
-                        {(() => {
-                            if (isLoading || !response) return (
-                                <Skeleton height='30px' width='150px' />
-                            )
-
-                            return (
-                                <ButtonGroup
-                                    variant="text"
-                                >
-                                    <Button
-                                        size="small"
-                                        onClick={toggleModal}
-                                    >
-                                        Perfil
-                                    </Button>
-                                    <Button
-                                        size="small"
-                                        onClick={() => {
-                                            loggout()
-                                        }}
-                                    >
-                                        Logout
-                                    </Button>
-                                </ButtonGroup>
-                            )
-                        })()}
-                    </Box>
-                </Box>
-            </Container>
+            <Header
+                response={response}
+                toggleModal={toggleModal}
+                isLoading={isLoading}
+                loggout={loggout}
+            />
         </Box>
     )
 }

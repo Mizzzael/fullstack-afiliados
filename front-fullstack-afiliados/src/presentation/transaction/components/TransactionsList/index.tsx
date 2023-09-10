@@ -18,6 +18,7 @@ import formatCurrency from "@root/presentation/common/utils/formatCurrency";
 import Empty from "@root/assets/animation/animation_lmbbtwyv.json"
 import Lottie from "react-lottie";
 import formatDate from "@root/presentation/common/utils/formatDate";
+import List from "@root/presentation/transaction/components/TransactionsList/List";
 
 const TransactionsList = () => {
     const [ page, setPage ] = useState(1)
@@ -35,136 +36,7 @@ const TransactionsList = () => {
                 setPage(1)
                 getTransactionsPaginated(1)
             }} />
-            <Table>
-                <TableHead>
-                    <TableRow>
-                        <TableCell>#id</TableCell>
-                        <TableCell>Data</TableCell>
-                        <TableCell>Tipo</TableCell>
-                        <TableCell>Produto</TableCell>
-                        <TableCell>Valor</TableCell>
-                        <TableCell>Vendedor</TableCell>
-                    </TableRow>
-                </TableHead>
-               <TableBody>
-                   {(() => {
-                       if (!response || isLoading) return (
-                           <>
-                                <TableRow>
-                                    <TableCell><Skeleton width={"30px"} height={"30px"} /></TableCell>
-                                    <TableCell><Skeleton width={"80px"} height={"30px"} /></TableCell>
-                                    <TableCell><Skeleton width={"80px"} height={"30px"} /></TableCell>
-                                    <TableCell><Skeleton width={"80px"} height={"30px"} /></TableCell>
-                                    <TableCell><Skeleton width={"80px"} height={"30px"} /></TableCell>
-                                    <TableCell><Skeleton width={"80px"} height={"30px"} /></TableCell>
-                                </TableRow>
-                                <TableRow>
-                                   <TableCell><Skeleton width={"30px"} height={"30px"} /></TableCell>
-                                   <TableCell><Skeleton width={"80px"} height={"30px"} /></TableCell>
-                                   <TableCell><Skeleton width={"80px"} height={"30px"} /></TableCell>
-                                   <TableCell><Skeleton width={"80px"} height={"30px"} /></TableCell>
-                                   <TableCell><Skeleton width={"80px"} height={"30px"} /></TableCell>
-                                   <TableCell><Skeleton width={"80px"} height={"30px"} /></TableCell>
-                                </TableRow>
-                               <TableRow>
-                                   <TableCell><Skeleton width={"30px"} height={"30px"} /></TableCell>
-                                   <TableCell><Skeleton width={"80px"} height={"30px"} /></TableCell>
-                                   <TableCell><Skeleton width={"80px"} height={"30px"} /></TableCell>
-                                   <TableCell><Skeleton width={"80px"} height={"30px"} /></TableCell>
-                                   <TableCell><Skeleton width={"80px"} height={"30px"} /></TableCell>
-                                   <TableCell><Skeleton width={"80px"} height={"30px"} /></TableCell>
-                               </TableRow>
-                               <TableRow>
-                                   <TableCell><Skeleton width={"30px"} height={"30px"} /></TableCell>
-                                   <TableCell><Skeleton width={"80px"} height={"30px"} /></TableCell>
-                                   <TableCell><Skeleton width={"80px"} height={"30px"} /></TableCell>
-                                   <TableCell><Skeleton width={"80px"} height={"30px"} /></TableCell>
-                                   <TableCell><Skeleton width={"80px"} height={"30px"} /></TableCell>
-                                   <TableCell><Skeleton width={"80px"} height={"30px"} /></TableCell>
-                               </TableRow>
-                           </>
-                        )
-
-                       return response.result.map(({ id, type, product, seller, value, date }) => (
-                           <TableRow key={id}>
-                               <TableCell>{id}</TableCell>
-                               <TableCell>{ formatDate(date) }</TableCell>
-                               <TableCell>{ type }</TableCell>
-                               <TableCell>{ product }</TableCell>
-                               <TableCell>{(() => {
-                                   if (value < 0) {
-                                       return (
-                                           <Typography
-                                                style={{
-                                                    color: 'red',
-                                                    fontWeight: 'bold'
-                                                }}
-                                           >
-                                               {formatCurrency(value)}
-                                           </Typography>
-                                       )
-                                   }
-                                   return (
-                                       <Typography
-                                           style={{
-                                               color: 'green',
-                                               fontWeight: 'bold'
-                                           }}
-                                       >
-                                           {formatCurrency(value)}
-                                       </Typography>
-                                   )
-                               })()}</TableCell>
-                               <TableCell>{ seller }</TableCell>
-                           </TableRow>
-                       ))
-                   })()}
-                </TableBody>
-                {(() => {
-                    if (!response) return;
-                    return (
-                        <TableFooter>
-                            <TableCell>
-                                <Typography
-                                    style={{
-                                        fontWeight: 'bold'
-                                    }}
-                                >
-                                    TOTAL:
-                                </Typography>
-                            </TableCell>
-                            <TableCell></TableCell>
-                            <TableCell></TableCell>
-                            <TableCell></TableCell>
-                            <TableCell></TableCell>
-                            <TableCell>{(() => {
-                                if (response.valueTotal < 0) {
-                                    return (
-                                        <Typography
-                                            style={{
-                                                color: 'red',
-                                                fontWeight: 'bold'
-                                            }}
-                                        >
-                                            {formatCurrency(response.valueTotal)}
-                                        </Typography>
-                                    )
-                                }
-                                return (
-                                    <Typography
-                                        style={{
-                                            color: 'green',
-                                            fontWeight: 'bold'
-                                        }}
-                                    >
-                                        {formatCurrency(response.valueTotal)}
-                                    </Typography>
-                                )
-                            })()}</TableCell>
-                        </TableFooter>
-                    );
-                })()}
-            </Table>
+            <List response={ response } isLoading={isLoading} />
             {(() => {
                 if (!response || !response.result.length) return (
                     <Box

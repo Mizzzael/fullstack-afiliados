@@ -186,6 +186,7 @@ const TransactionFileUploader: React.FC<{ callback?: () => void }> = ({ callback
             <Button
                 color={'success'}
                 onClick={showOpenBind}
+                id="modal-uploader-trigger"
             >
                 Novas Transações
             </Button>

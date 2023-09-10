@@ -2,7 +2,7 @@ import {useCallback, useMemo, useState} from "react";
 import axios from 'axios'
 import {useAuth} from "@root/provider/AuthProvider";
 
-interface useMeResponse {
+export interface useMeResponse {
     "email": string,
     "name": string,
     "message": string,
@@ -52,7 +52,7 @@ export const useMe = (): useMeProps => {
     return Me;
 }
 
-interface newUser {
+export interface newUser {
     name: string;
     email: string;
     password: string;

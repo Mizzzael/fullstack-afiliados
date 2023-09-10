@@ -16,12 +16,14 @@ const LoginHeader = () => {
                 fullWidth
             >
                 <Button
+                    id="login-page-button"
                     variant={(page === 1) ? 'contained': 'outlined'}
                     onClick={() => { changePage(1) }}
                 >
                     Login
                 </Button>
                 <Button
+                    id="create-page-button"
                     variant={(page === 2) ? 'contained': 'outlined'}
                     onClick={() => { changePage(2) }}
                 >

@@ -29,22 +29,32 @@ class UserUseCase {
     return response;
   }
 
-  async createUser(newUser: CreateUserDto) {
-    const User = new UserEntity();
-    User.active = true;
-    User.email = newUser.email;
-    User.name = newUser.name;
-    User.password = await hash(newUser.password, 12);
-    const newUserResponse = await this.userRepository.save(User);
+  async createUser(newUser: CreateUserDto): Promise<CreateUserSuccess> {
+    try {
+      const User = new UserEntity();
+      User.active = true;
+      User.email = newUser.email;
+      User.name = newUser.name;
+      User.password = await hash(newUser.password, 12);
+      const newUserResponse = await this.userRepository.save(User);
 
-    const response: CreateUserSuccess = {
-      email: newUserResponse.email,
-      name: newUserResponse.name,
-      message: 'Sucesso!',
-      status: HttpStatus.CREATED,
-    };
+      const response: CreateUserSuccess = {
+        email: newUserResponse.email,
+        name: newUserResponse.name,
+        message: 'Sucesso!',
+        status: HttpStatus.CREATED,
+      };
 
-    return response;
+      return response;
+    } catch (e) {
+      return {
+        email: newUser.email,
+        name: newUser.name,
+        message: 'Error!',
+        status: HttpStatus.BAD_REQUEST,
+        error: e.message,
+      };
+    }
   }
 
   async updateUser(userId: number, userData: UpdateUserDto) {

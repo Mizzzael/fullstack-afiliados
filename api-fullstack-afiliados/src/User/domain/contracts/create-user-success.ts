@@ -5,6 +5,7 @@ interface CreateUserSuccess {
   name: string;
   email: string;
   message: string;
+  error?: string;
 }
 
 export default CreateUserSuccess;

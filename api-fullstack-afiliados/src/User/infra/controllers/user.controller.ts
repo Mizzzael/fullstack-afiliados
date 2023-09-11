@@ -17,6 +17,7 @@ import createUserFail from '../../domain/contracts/create-user-fail';
 import CreateUserFail from '../../domain/contracts/create-user-fail';
 import UpdateUserDto from '../dto/update-user.dto';
 import AuthGuard from '../../../Auth/domain/usecases/guard.usecase';
+import { ApiHeader } from '@nestjs/swagger';
 
 @Controller({
   path: '/user',
@@ -24,15 +25,24 @@ import AuthGuard from '../../../Auth/domain/usecases/guard.usecase';
 class UserController {
   constructor(private userRepository: userUsecase) {}
   @Post('/create')
-  async createUser(@Body() body: createUserDto, @Res() res: Response) {
+  async createUser(
+    @Body() body: createUserDto,
+    @Res() res: Response,
+  ): Promise<void | Error> {
     try {
       const NewUser = await this.userRepository.createUser(body);
+
+      if (!NewUser || NewUser.error) {
+        throw new Error('Error in NewUser object.');
+      }
+
       res.status(HttpStatus.CREATED);
       const successResponse: createUserSuccess = {
         email: NewUser.email,
         name: NewUser.name,
         message: NewUser.message,
         status: HttpStatus.CREATED,
+        error: NewUser.error,
       };
 
       res.json(successResponse);

@@ -1,3 +1,18 @@
+This is a challenge by [Coodesh](https://coodesh.com/)
+
+# Mini Documentation:
+
+Hello, how are you?
+This is my test, right away I can say that unfortunately I was not able to meet all the requests, as unfortunately I had a somewhat turbulent week, which compromised my delivery, it is something occasional, but unfortunately it happened.
+
+But basically I created the test with Next.js and Nest.js, the latter unfortunately I was unable to finish Swagger and test them, but the rest of the application was ready.
+To run the application, just run ```sudo docker compose up```, and if you want to run the development environment, just run ```sudo docker compose -f ./docker-compose.dev.yml up``` , other than that I used the styled-component instead of a css preprocessor, in addition to using Material UI, to facilitate development, and in addition to this I used React-hook-forms, to manage the forms.
+
+Well, that's basically it, I wanted to be able to document the api with Swagger, but as I said, Cronos made my week more expensive.
+kkkkkkkk
+
+Thank you in advance for the opportunity and I remain at your disposal.
+
 # Fullstack Afiliados
 
 O objetivo desse teste é avaliar as suas habilidades em programação.

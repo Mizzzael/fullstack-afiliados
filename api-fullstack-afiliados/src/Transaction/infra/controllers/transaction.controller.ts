@@ -21,6 +21,7 @@ import UserEntity from '../../../User/domain/entities/user.entity';
 import CreateTransactionByString from '../utils/createTransactionByString';
 import TransactionDto from '../dto/transaction.dto';
 import CreateMultiplesTransactions from '../../domain/contracts/create-multiples-transactions';
+import { ApiBody, ApiHeader } from '@nestjs/swagger';
 
 @Controller({
   path: 'transaction',
@@ -34,6 +35,15 @@ class TransactionController {
   @UseGuards(AuthGuard)
   @Post('/file')
   @UseInterceptors(FileInterceptor('transactions'))
+  // @ApiBody({
+  //   schema: {
+  //
+  //   }
+  // })
+  @ApiHeader({
+    name: 'X-Authorization-AWS',
+    description: 'AWS authorization header',
+  })
   async uploadTransactions(
     @UploadedFile(
       new ParseFilePipe({
